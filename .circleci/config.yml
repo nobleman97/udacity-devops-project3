@@ -14,7 +14,7 @@ commands:
           when: on_fail
           command: |
             #!/bin/bash -eo pipefail
-            aws s3 rm s3://altschool-bucket-243545356 --recursive
+            aws s3 rm s3://udapeople-32a79ee --recursive
             aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
             aws cloudformation delete-stack --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
 
