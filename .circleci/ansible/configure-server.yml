@@ -1,7 +1,7 @@
 ---
 
 - name: "configuration play." 
-  hosts: all
+  hosts: web
   user: ubuntu
   become: true
   become_method: sudo
@@ -17,8 +17,7 @@
       wait_for_connection:
         timeout: 600
   
-  tasks:
-    - hosts: all
+
     - name: "install python for Ansible."
       apt:
         name: python3
@@ -26,7 +25,7 @@
         update_cache: yes
 
   # Get the environment variables from CircleCI and add to the EC2 instance
-- environment:
+  environment:
     - TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION')}}"
     - TYPEORM_ENTITIES: "{{ lookup('env', 'TYPEORM_ENTITIES')}}"
     - TYPEORM_HOST: "{{ lookup('env', 'TYPEORM_HOST')}}"
