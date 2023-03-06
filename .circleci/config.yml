@@ -215,19 +215,22 @@ jobs:
 
   run-migrations:
     docker:
-      - image: circleci/node:13.8.0
+      - image: python:3.10-alpine3.16
     steps:
       - checkout
       - restore_cache:
           keys: [backend-build]
 
       - run:
-          name: Install Dependencies
+          name: Install dependencies
           command: |
-            apt update
-            apt install python3
-            apt install python3-pip
-            pip3 install awscli
+            apk add --update --no-cache tar
+            apk add --update --no-cache curl
+            apk add --update --no-cache gzip
+            apk add --update --no-cache nodejs
+            apk add --update --no-cache npm
+            apk add --update --no-cache aws-cli
+            apk add --update --no-cache curl
 
       - run:
           name: Run migrations
