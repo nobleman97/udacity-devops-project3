@@ -190,10 +190,10 @@ jobs:
       - image: python:3.10-alpine3.16
     steps:
       - checkout
-      - add_ssh_keys
+      - add_ssh_keys:
          fingerprints:
             - "1d:9c:db:d5:39:ca:9d:0e:44:37:ba:d7:c0:96:cd:7c"
-      # attach workspace
+     
       - attach_workspace:
           at: ~/
       - run:
@@ -287,7 +287,7 @@ jobs:
       - checkout
       # Add ssh keys with fingerprint
       # attach workspace
-      - add_ssh_keys
+      - add_ssh_keys:
          fingerprints:
             - "1d:9c:db:d5:39:ca:9d:0e:44:37:ba:d7:c0:96:cd:7c"
 
