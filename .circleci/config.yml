@@ -29,6 +29,7 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
+            #!/bin/bash -eo pipefail
             SUCCESS=$(curl --insecure  https://kvdb.io/6f8V25HXvj7Nq8KzbefKYt/migration_${CIRCLE_WORKFLOW_ID:0:7})
 
             if(( $SUCCESS==1 )); 
@@ -210,11 +211,6 @@ jobs:
             ansible-playbook -i inventory.txt configure-server.yml
           no_output_timeout: 30m
 
-      - run:
-          name: Show values
-          command: |
-            echo $TYPEORM_CONNECTION
-            echo $TYPEORM_PASSWORD
 
 
       # Here's where you will add some code to rollback on failure   
@@ -223,27 +219,23 @@ jobs:
 
   run-migrations:
     docker:
-      - image: python:3.7-alpine3.16
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - run:
           name: Install Dependencies
           command: |
-            apk add --update --no-cache tar gzip nodejs npm aws-cli curl
-
+            sudo apt install -y tar gzip curl
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip -qq awscliv2.zip
+            sudo ./aws/install
       - restore_cache:
           keys: [backend-build]
-
-
-
       - run:
           name: Run migrations
           command: |
             cd backend
-            npm install
-
-            npm run build
-
+            # npm run build
             npm run migrations >> migrations_dump.txt
             cat migrations_dump.txt
 
@@ -276,6 +268,9 @@ jobs:
             apk add --update --no-cache aws-cli
             apk add --update --no-cache curl
             
+      - restore_cache:
+          keys: [frontend-build]
+
       - run:
           name: Get backend url
           command: |
@@ -288,18 +283,12 @@ jobs:
             echo API_URL="http://${BACKEND_IP}:3000" >> frontend/.env
             cat frontend/.env
 
-      - restore_cache:
-          keys: [frontend-build]
-
       - run:
           name: Deploy frontend objects
           command: |
             cd frontend
             npm install
-            npm audit fix --audit-level=critical --force
-
             npm run build
-
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recurive
       # Here's where you will add some code to rollback on failure      
@@ -315,8 +304,7 @@ jobs:
       - image: python:3.10-alpine3.16
     steps:
       - checkout
-      # Add ssh keys with fingerprint
-      # attach workspace
+
       - add_ssh_keys:
          fingerprints:
             - "9a:37:ae:5d:82:a6:ff:55:9a:b5:e9:ce:c5:a9:cb:77"
@@ -370,7 +358,7 @@ jobs:
 
   smoke-test:
     docker:
-      - image: python:3.10-alpine3.16
+      - image: python:3.7-alpine3.16
     steps:
       - checkout
       - run:
