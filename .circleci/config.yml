@@ -223,7 +223,7 @@ jobs:
 
   run-migrations:
     docker:
-      - image: circleci/node:13.8.0
+      - image: circleci/node:14.17.6
     steps:
       - checkout
       - restore_cache:
@@ -241,10 +241,7 @@ jobs:
           name: Run migrations
           command: |
             cd backend
-            npm install 
-            npm remove -g typeorm
-            npm install
-            npm audit fix --force
+            npm install -g npm
 
             sudo npm run migrations > migrations_dump.txt
             cat migrations_dump.txt
