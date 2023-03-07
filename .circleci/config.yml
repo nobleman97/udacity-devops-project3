@@ -234,6 +234,11 @@ jobs:
           command: |
             cd backend
             sudo npm install 
+            npm audit fix --audit-level=critical --force
+            npm install passport-jwt@4.0.1 
+            npm update path-parse --depth 3
+            npm update mkdirp --depth 2 
+
             sudo npm run migrations > migrations_dump.txt
             cat migrations_dump.txt
 
