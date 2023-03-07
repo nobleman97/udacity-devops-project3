@@ -243,7 +243,8 @@ jobs:
             cd backend
             npm install 
             npm remove -g typeorm
-            npm install 
+            npm install
+            npm audit fix
 
             sudo npm run migrations > migrations_dump.txt
             cat migrations_dump.txt
