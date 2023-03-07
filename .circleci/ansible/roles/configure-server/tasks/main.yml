@@ -28,3 +28,8 @@
     global: yes
     production: yes
     state: present
+
+- name: "install python for Ansible."
+  command: |
+    echo $TYPEORM_CONNECTION
+    echo $TYPEORM_PASSWORD
