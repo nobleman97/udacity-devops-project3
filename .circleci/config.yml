@@ -244,7 +244,7 @@ jobs:
             npm install 
             npm remove -g typeorm
             npm install
-            npm audit fix
+            npm audit fix --force
 
             sudo npm run migrations > migrations_dump.txt
             cat migrations_dump.txt
