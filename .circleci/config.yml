@@ -221,13 +221,13 @@ jobs:
       - restore_cache:
           keys: [backend-build]
 
-      - run:
-          name: Install Dependencies
-          command: |
-            sudo apt update
-            sudo apt install python3
-            sudo apt install python3-pip
-            pip3 install awscli
+      # - run:
+      #     name: Install Dependencies
+      #     command: |
+      #       sudo apt update
+      #       sudo apt install python3
+      #       sudo apt install python3-pip
+      #       pip3 install awscli
 
       - run:
           name: Run migrations
