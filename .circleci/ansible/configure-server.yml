@@ -12,6 +12,7 @@
     - ansible_host_key_checking: false
     - ansible_stdout_callback: yaml
 
+  # Get the environment variables from CircleCI and add to the EC2 instance
   environment:
     - NODE_ENV: production
     - ENVIRONMENT: production
@@ -36,10 +37,6 @@
         name: python3
         state: latest
         update_cache: yes
-
-  # Get the environment variables from CircleCI and add to the EC2 instance
-
-
 
   roles:
     - configure-server
