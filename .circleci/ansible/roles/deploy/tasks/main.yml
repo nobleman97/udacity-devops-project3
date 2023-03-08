@@ -33,9 +33,9 @@
 - name: "Extract Artifact"
   become: true
   unarchive:
-    src: /root/project/artifact.tar.gz
+    src: files/artifact.tar.gz
     dest: .
-    remote_src: yes
+    # remote_src: yes
 
 - name: "Start app"
   become: yes
