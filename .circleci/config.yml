@@ -457,10 +457,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install Dependencies
-          command: |
-            yum install tar gzip jq -y
-      - run:
           name: Get old stack workflow id
           command: |
             export OldWorkflowID=$(aws cloudformation \
@@ -478,11 +474,12 @@ jobs:
       - run:
           name: Remove old stacks and files
           command: |
-            for stack in $(echo "${STACKS}" | jq -r '.[] | select(.StackName | contains("'"${OldWorkflowID}"'") | .StackName) | .StackName'); do
+            for stack in $(echo "${STACKS}" | jq -r '.[] | select(.StackName | contains("'"${OldWorkflowID}"'")) | .StackName'); do
               aws s3 rm "s3://udapeople-${stack}" --recursive
               aws cloudformation delete-stack --stack-name "udapeople-backend-${stack}"
               aws cloudformation delete-stack --stack-name "udapeople-frontend-${stack}"
             done
+
 
             
 
