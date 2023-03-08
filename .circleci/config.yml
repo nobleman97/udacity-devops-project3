@@ -270,8 +270,8 @@ jobs:
 
 
             
-      - restore_cache:
-          keys: [frontend-build]
+      # - restore_cache:
+      #     keys: [frontend-build]
 
       - run:
           name: Get backend url
@@ -280,6 +280,7 @@ jobs:
             --query "Reservations[*].Instances[*].[PublicIpAddress]" \
             --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
             --output text)
+
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL=${API_URL}"
             echo API_URL="http://${BACKEND_IP}:3000" >> frontend/.env
@@ -316,6 +317,9 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update --no-cache ansible tar gzip nodejs npm curl aws-cli
+
+      # - restore_cache:
+      #     keys: [backend-build]
 
       - run:
           name: Deploy backend
@@ -438,7 +442,7 @@ jobs:
             aws cloudformation deploy \
             --template-file .circleci/files/cloudfront.yml \
             --stack-name InitialStack \
-            --parameter-overrides WorkflowID=${CIRCLE_WORKFLOW_ID:0:7} \
+            --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
             --tags project=udapeople
 
       # Here's where you will add some code to rollback on failure  
