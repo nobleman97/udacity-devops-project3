@@ -478,7 +478,7 @@ jobs:
       - run:
           name: Remove old stacks and files
           command: |
-            for stack in $(echo "${STACKS[@]}" | contains("'"${OldWorkflowID}"'")); do
+            for stack in $(echo "${STACKS[@]}" | jq -r '.[] | select(.StackName | contains("'"${OldWorkflowID}"'")) | .StackName'); do
               echo "checking stack ${stack}"
               aws s3 rm "s3://udapeople-${stack}" --recursive
               aws cloudformation delete-stack --stack-name "udapeople-backend-${stack}"
