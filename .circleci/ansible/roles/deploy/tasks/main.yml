@@ -33,7 +33,7 @@
 - name: "Extract Artifact"
   become: true
   unarchive:
-    src: ./artifacts.tar.gz
+    src: ./artifact.tar.gz
     dest: .
     remote_src: yes
 
